@@ -1,7 +1,9 @@
 /* Keep the existing visual system intact while Next owns the application shell. */
 @import '../styles.css';
+@import './brand.css';
+@import './country-guide.css';
 
 /* The country panel is now a stateful React component rather than three IDs. */
 .country-panel.dubai .country-image{background-image:url('https://www.imtgroupglobal.com/ilac/assets/vision-civic.webp')}
-.country-panel.vietnam .country-image{background-image:linear-gradient(120deg,#846b50,#c7aa82)}
-.country-panel.thailand .country-image{background-image:linear-gradient(120deg,#607970,#d7b680)}
+.country-panel.vietnam .country-image{background-image:linear-gradient(120deg,#7aadd0,#d8eef1)}
+.country-panel.thailand .country-image{background-image:linear-gradient(120deg,#7199b8,#d8edf3)}
