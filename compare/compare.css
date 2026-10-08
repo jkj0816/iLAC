@@ -1,0 +1,544 @@
+/* =========================================================
+   ILAC COUNTRY COMPARISON
+========================================================= */
+
+:root {
+  --compare-black: #10233f;
+  --compare-white: #f4f7fa;
+  --compare-gray: #718096;
+  --compare-line: rgba(16, 35, 63, 0.14);
+  --compare-soft: #e7edf3;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.compare-header {
+  position: relative;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.compare-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 150px 7vw 100px;
+  background:
+    linear-gradient(
+      120deg,
+      #101d32 0%,
+      #1b304d 55%,
+      #304966 100%
+    );
+  color: #fff;
+}
+
+.compare-hero-inner {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.compare-hero .label {
+  margin-bottom: 32px;
+  color: rgba(255,255,255,.65);
+}
+
+.compare-hero h1 {
+  margin: 0;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(52px, 7vw, 108px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.06em;
+}
+
+.compare-hero h1 em {
+  font-style: normal;
+  color: #cbd8e6;
+}
+
+.hero-description {
+  max-width: 650px;
+  margin-top: 38px;
+  color: rgba(255,255,255,.7);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 44px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.45);
+  padding-bottom: 8px;
+  transition: .25s ease;
+}
+
+.back-link:hover {
+  border-color: #fff;
+}
+
+
+/* =========================================================
+   RESULT SUMMARY
+========================================================= */
+
+.result-summary {
+  padding: 130px 7vw;
+  background: var(--compare-white);
+}
+
+.result-summary-content {
+  max-width: 1200px;
+  margin: 70px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--compare-line);
+}
+
+.result-message {
+  display: flex;
+  gap: 35px;
+  padding: 55px 50px 55px 0;
+  border-right: 1px solid var(--compare-line);
+}
+
+.secondary-result {
+  padding-left: 50px;
+  border-right: 0;
+}
+
+.result-number {
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+  color: var(--compare-gray);
+}
+
+.result-kicker {
+  margin-bottom: 16px;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--compare-gray);
+}
+
+.result-message h3 {
+  margin: 0 0 15px;
+  font-family: "Anton", sans-serif;
+  font-size: clamp(38px, 5vw, 68px);
+  font-weight: 400;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.result-message p:last-child {
+  max-width: 430px;
+  margin: 0;
+  line-height: 1.8;
+  color: #596779;
+}
+
+
+/* =========================================================
+   COMMON SECTION TITLE
+========================================================= */
+
+.section-title {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title h2 {
+  margin-top: 20px;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(42px, 5vw, 74px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -.055em;
+}
+
+.section-title h2 em {
+  font-style: normal;
+}
+
+
+/* =========================================================
+   COMPARISON
+========================================================= */
+
+.comparison-section {
+  padding: 130px 7vw;
+  background: #fff;
+}
+
+.comparison-heading {
+  max-width: 1200px;
+  margin: 0 auto 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 80px;
+}
+
+.comparison-heading h2 {
+  margin-top: 20px;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -.055em;
+}
+
+.comparison-heading h2 em {
+  font-style: normal;
+}
+
+.comparison-heading > p {
+  max-width: 350px;
+  margin: 0;
+  color: #596779;
+  line-height: 1.8;
+}
+
+.comparison-table-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.comparison-table {
+  min-width: 850px;
+  border-top: 2px solid var(--compare-black);
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 150px repeat(3, 1fr);
+  border-bottom: 1px solid var(--compare-line);
+}
+
+.comparison-row > div {
+  min-height: 100px;
+  padding: 28px 25px;
+  display: flex;
+  align-items: center;
+  line-height: 1.65;
+}
+
+.comparison-label {
+  background: #edf2f7;
+  font-weight: 600;
+}
+
+.comparison-head > div {
+  min-height: 150px;
+}
+
+.country-column {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start !important;
+  justify-content: center;
+}
+
+.country-column span {
+  margin-bottom: 10px;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  color: var(--compare-gray);
+  letter-spacing: .1em;
+}
+
+.country-column h3 {
+  margin: 0;
+  font-family: "Anton", sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: .02em;
+}
+
+
+/* =========================================================
+   COUNTRY CARDS
+========================================================= */
+
+.country-cards-section {
+  padding: 130px 7vw;
+  background: var(--compare-white);
+}
+
+.country-cards {
+  max-width: 1200px;
+  margin: 70px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.country-card {
+  min-height: 550px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* DUBAI */
+
+.country-card.dubai {
+  background:
+    linear-gradient(
+      145deg,
+      #14243a,
+      #36536f
+    );
+}
+
+
+/* VIETNAM */
+
+.country-card.vietnam {
+  background:
+    linear-gradient(
+      145deg,
+      #253c55,
+      #607b94
+    );
+}
+
+
+/* THAILAND */
+
+.country-card.thailand {
+  background:
+    linear-gradient(
+      145deg,
+      #33485f,
+      #71879c
+    );
+}
+
+.country-card-top {
+  display: flex;
+  justify-content: space-between;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  opacity: .65;
+}
+
+.country-name {
+  margin-bottom: 15px;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  letter-spacing: .12em;
+}
+
+.country-card h3 {
+  margin: 0;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -.04em;
+}
+
+.country-card p:not(.country-name) {
+  max-width: 340px;
+  margin-top: 25px;
+  color: rgba(255,255,255,.72);
+  line-height: 1.75;
+}
+
+.country-card a {
+  color: #fff;
+  text-decoration: none;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255,255,255,.25);
+  transition: .25s ease;
+}
+
+.country-card a:hover {
+  border-color: #fff;
+}
+
+
+/* =========================================================
+   NEXT STEP
+========================================================= */
+
+.compare-next {
+  padding: 150px 7vw;
+  text-align: center;
+  background: #10233f;
+  color: #fff;
+}
+
+.compare-next h2 {
+  margin: 25px auto;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(42px, 6vw, 84px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -.06em;
+}
+
+.compare-next h2 em {
+  font-style: normal;
+  color: #cbd8e6;
+}
+
+.compare-next > p:not(.label) {
+  max-width: 550px;
+  margin: 0 auto 42px;
+  color: rgba(255,255,255,.62);
+  line-height: 1.8;
+}
+
+.compare-next .primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 55px;
+  padding: 0 28px;
+  color: #10233f;
+  background: #fff;
+  text-decoration: none;
+  transition: .25s ease;
+}
+
+.compare-next .primary:hover {
+  background: #dce6ef;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  background: #0d1b2d;
+  color: #fff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .compare-hero {
+    min-height: 65vh;
+    padding: 130px 6vw 80px;
+  }
+
+  .result-summary,
+  .comparison-section,
+  .country-cards-section {
+    padding: 90px 6vw;
+  }
+
+  .result-summary-content {
+    grid-template-columns: 1fr;
+  }
+
+  .result-message {
+    padding: 40px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--compare-line);
+  }
+
+  .secondary-result {
+    padding-left: 0;
+    border-bottom: 0;
+  }
+
+  .comparison-heading {
+    display: block;
+  }
+
+  .comparison-heading > p {
+    margin-top: 35px;
+  }
+
+  .country-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .country-card {
+    min-height: 470px;
+  }
+}
+
+
+@media (max-width: 640px) {
+
+  .compare-hero {
+    min-height: 72vh;
+    padding: 110px 22px 65px;
+  }
+
+  .compare-hero h1 {
+    font-size: 52px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .result-summary,
+  .comparison-section,
+  .country-cards-section {
+    padding: 75px 22px;
+  }
+
+  .section-title h2,
+  .comparison-heading h2 {
+    font-size: 42px;
+  }
+
+  .result-message {
+    gap: 20px;
+  }
+
+  .result-message h3 {
+    font-size: 48px;
+  }
+
+  .comparison-heading {
+    margin-bottom: 45px;
+  }
+
+  .comparison-table-wrap {
+    margin-left: -22px;
+    margin-right: -22px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .country-card {
+    min-height: 430px;
+    padding: 25px;
+  }
+
+  .compare-next {
+    padding: 100px 22px;
+  }
+
+  .compare-next h2 {
+    font-size: 45px;
+  }
+
+}
