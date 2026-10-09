@@ -22,57 +22,14 @@
 
 <body>
 
-<header class="compare-header">
-
-  <a class="logo" href="../index.html" aria-label="iLAC 홈">
-    ILAC
-
-    <small>
-      IMMIGRATION LIFE<br>
-      ASSISTANCE COMPANY
-    </small>
-
-    <span class="brand-logo-mark" aria-hidden="true">
-      <img src="../assets/ilac-logo.png" alt="">
-    </span>
-  </a>
-
-  <nav>
-    <a href="../index.html#about">ILAC 소개</a>
-    <a href="../index.html#solutions">솔루션</a>
-    <a href="../index.html#countries">국가 전략</a>
-    <a href="../index.html#academy">ACADEMY</a>
-    <a href="../index.html#contact">문의하기</a>
-  </nav>
-
-  <div class="header-actions">
-
-    <div
-      class="language-switcher"
-      role="group"
-      aria-label="언어 선택"
-    >
-      <button class="lang active" data-lang="ko">
-        KO
-      </button>
-
-      <span>/</span>
-
-      <button class="lang" data-lang="en">
-        EN
-      </button>
-    </div>
-
-    <a class="nav-cta" href="../index.html#contact">
-      상담 신청　↗
-    </a>
-
-  </div>
-
-</header>
+<a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+<header class="site-header"><a class="logo" href="../index.html" aria-label="iLAC 홈"><img src="../assets/ilac-logo.png" alt="iLAC"></a>
+<nav id="site-nav" aria-label="주요 메뉴"><a href="../index.html#purpose">목적 찾기</a><a href="../index.html#countries">국가 가이드</a><a href="../index.html#services">정착 서비스</a><a href="../index.html#education">교육</a><a href="../index.html#academy">Academy</a></nav>
+<div class="header-actions"><div class="language-switcher" role="group" aria-label="언어 선택"><button class="lang active" data-lang="ko" aria-pressed="true">KO</button><span>/</span><button class="lang" data-lang="en" aria-pressed="false">EN</button></div><a class="nav-cta" href="../index.html#contact">상담 문의 <span aria-hidden="true">↗</span></a></div>
+<button class="menu" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">☰</button></header>
 
 
-<main>
+<main id="main-content">
 
   <!-- HERO -->
 
@@ -96,9 +53,9 @@
 
       <a
         class="back-link"
-        href="../index.html#diagnosis"
+        href="../index.html?restart=1#diagnosis"
       >
-        ← 진단 다시 하기
+        ← 국가 찾기 다시 하기
       </a>
 
     </div>
@@ -206,7 +163,7 @@
     </div>
 
 
-    <div class="comparison-table-wrap">
+    <p class="table-hint">모바일에서는 표를 좌우로 움직여 확인하세요.</p><div class="comparison-table-wrap" tabindex="0" role="region" aria-label="국가별 상세 비교표">
 
       <div class="comparison-table">
 
@@ -495,33 +452,18 @@
 </main>
 
 
-<footer>
-
-  <b class="footer-brand" aria-label="iLAC">
-    ILAC
-
-    <span class="brand-logo-mark" aria-hidden="true">
-      <img src="../assets/ilac-logo.png" alt="">
-    </span>
-  </b>
-
-  <span>IMT GROUP</span>
-
-  <p>
-    © 2026 IMT GROUP. All rights reserved.
-  </p>
-
-</footer>
+<footer class="site-footer"><div class="footer-top"><a class="logo" href="../index.html" aria-label="iLAC 홈"><img src="../assets/ilac-logo.png" alt="iLAC"></a><p>해외에서의 삶을 설계하는 글로벌 정착 플랫폼</p><a href="https://goilac.com/home" target="_blank" rel="noopener">iLAC 플랫폼 둘러보기 ↗</a></div><div class="footer-bottom"><p>아일락(iLAC) · 사업자등록번호 702-17-02664<br><a href="mailto:admin@goilac.com">admin@goilac.com</a><br>© 2026 iLAC · IMT GROUP</p><nav aria-label="회사 및 정책"><a href="https://goilac.com/help" target="_blank" rel="noopener">도움말</a><a href="https://goilac.com/privacy" target="_blank" rel="noopener">개인정보 처리방침</a><a href="https://goilac.com/terms" target="_blank" rel="noopener">이용약관</a><a href="https://goilac.com/licenses" target="_blank" rel="noopener">라이선스</a></nav></div></footer>
 
 
+<script src="../shared.js"></script>
 <script>
 
   /*
    * 진단 결과 가져오기
    */
 
-  const savedResult =
-    localStorage.getItem('ilacDiagnosisResult');
+  let savedResult = null;
+  try { savedResult = localStorage.getItem('ilacDiagnosisResult'); } catch {}
 
 
   const countryInfo = {
@@ -547,6 +489,10 @@
   };
 
 
+  if (!savedResult) {
+    document.querySelector('.hero-description').textContent = '세 국가의 목적과 생활 조건을 같은 기준으로 살펴보세요.';
+    document.querySelector('.result-summary').hidden = true;
+  }
   if (savedResult) {
 
     try {
@@ -557,13 +503,11 @@
       const ranking =
         result.ranking;
 
-      if (ranking && ranking.length >= 2) {
+      if (ranking && ranking.length >= 2 && countryInfo[ranking[0]?.country] && countryInfo[ranking[1]?.country]) {
 
-        const first =
-          countryInfo[ranking[0].country];
+        const first = countryInfo[ranking[0].country];
 
-        const second =
-          countryInfo[ranking[1].country];
+        const second = countryInfo[ranking[1].country];
 
 
         document.querySelector(
@@ -573,7 +517,7 @@
 
         document.querySelector(
           '#primary-reason'
-        ).textContent = first.reason;
+        ).textContent = result.reasons?.[ranking[0].country] || first.reason;
 
 
         document.querySelector(
@@ -583,12 +527,14 @@
 
         document.querySelector(
           '#secondary-reason'
-        ).textContent = second.reason;
+        ).textContent = result.reasons?.[ranking[1].country] || second.reason;
 
       }
 
+      if (!ranking || ranking.length < 2 || !countryInfo[ranking[0]?.country] || !countryInfo[ranking[1]?.country]) document.querySelector('.result-summary').hidden = true;
     } catch (error) {
 
+      document.querySelector('.result-summary').hidden = true;
       console.warn(
         '진단 결과를 불러오지 못했습니다.',
         error
@@ -598,6 +544,8 @@
 
   }
 
+  const summary = document.querySelector('.result-summary');
+  if (savedResult && !summary.hidden) { const note = document.createElement('p'); note.className = 'result-disclaimer'; note.textContent = '답변을 바탕으로 먼저 살펴볼 국가를 제안합니다. 체류 자격과 실제 적합성은 개인 조건과 전문가 상담으로 확인하세요.'; summary.append(note); }
 
   /*
    * 언어
@@ -605,11 +553,11 @@
 
   const koreanTexts = {
 
-    'nav a:nth-child(1)': 'ILAC 소개',
-    'nav a:nth-child(2)': '솔루션',
-    'nav a:nth-child(3)': '국가 전략',
-    'nav a:nth-child(4)': 'ACADEMY',
-    'nav a:nth-child(5)': '문의하기',
+    'nav a:nth-child(1)': '목적 찾기',
+    'nav a:nth-child(2)': '국가 가이드',
+    'nav a:nth-child(3)': '정착 서비스',
+    'nav a:nth-child(4)': '교육',
+    'nav a:nth-child(5)': 'Academy',
 
     '.nav-cta': '상담 신청　↗',
 
@@ -623,7 +571,7 @@
       '진단에서 선택한 목적과 우선순위를 기준으로 비교가 필요한 국가를 정리했습니다.',
 
     '.back-link':
-      '← 진단 다시 하기',
+      '← 국가 찾기 다시 하기',
 
     '.result-summary .label':
       'YOUR RESULT',
@@ -657,11 +605,11 @@
 
   const englishTexts = {
 
-    'nav a:nth-child(1)': 'ABOUT ILAC',
-    'nav a:nth-child(2)': 'SOLUTIONS',
-    'nav a:nth-child(3)': 'COUNTRY STRATEGY',
-    'nav a:nth-child(4)': 'ACADEMY',
-    'nav a:nth-child(5)': 'CONTACT',
+    'nav a:nth-child(1)': 'YOUR PURPOSE',
+    'nav a:nth-child(2)': 'COUNTRY GUIDES',
+    'nav a:nth-child(3)': 'SETTLEMENT',
+    'nav a:nth-child(4)': '교육',
+    'nav a:nth-child(5)': 'ACADEMY',
 
     '.nav-cta':
       'START A CONSULTATION　↗',

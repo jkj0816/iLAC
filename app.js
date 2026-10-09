@@ -145,10 +145,11 @@ document.querySelectorAll('[data-dialog]').forEach(button => {
 const koreanContent = new Map();
 
 const localizedEnglish = {
-  'nav a:nth-child(1)': 'ABOUT ILAC',
-  'nav a:nth-child(2)': 'SOLUTIONS',
-  'nav a:nth-child(3)': 'COUNTRY STRATEGY',
-  'nav a:nth-child(5)': 'CONTACT',
+  'header nav a:nth-child(1)': 'YOUR PURPOSE',
+  'header nav a:nth-child(2)': 'COUNTRY GUIDES',
+  'header nav a:nth-child(3)': 'SETTLEMENT',
+  'header nav a:nth-child(4)': 'EDUCATION',
+  'header nav a:nth-child(5)': 'ACADEMY',
 
   '.nav-cta': 'START A CONSULTATION　↗',
 
@@ -185,7 +186,7 @@ const localizedEnglish = {
     'Five questions point you to the countries, content and consultation route that fit your priorities.',
 
   '.diagnosis .primary':
-    'START THE 3-MINUTE CHECK　→',
+    'FIND YOUR COUNTRY　→',
 
   '.diagnosis small':
     'NO PERSONAL DETAILS REQUIRED',
@@ -292,6 +293,7 @@ if (menu && header) {
 
     menu.setAttribute('aria-expanded', open);
     menu.textContent = open ? '×' : '☰';
+    menu.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
   });
 
   document.querySelectorAll('nav a').forEach(link => {
@@ -300,31 +302,6 @@ if (menu && header) {
       menu.setAttribute('aria-expanded', 'false');
       menu.textContent = '☰';
     });
-  });
-}
-
-
-/* =========================================================
-   CONTACT
-========================================================= */
-
-const contactButton = document.querySelector('#contact-open');
-
-if (contactButton) {
-  contactButton.addEventListener('click', () => {
-    const data = {
-      label: 'CONSULTATION',
-      title: '상담을 시작해보세요',
-      text: '목적과 예상 시점, 가족 구성, 가장 궁금한 내용을 남겨주시면 적합한 상담 경로를 안내합니다.',
-      list: [
-        '해외 정착 · 거주',
-        '주거 · 자산 · 교육',
-        '사업 · 투자 · 법인',
-        '국가별 실행 전략'
-      ]
-    };
-
-    openDetailDialog(data);
   });
 }
 
@@ -342,7 +319,8 @@ const questions = [
       '은퇴',
       '자녀 교육',
       '투자',
-      '새로운 라이프스타일'
+      '새로운 라이프스타일',
+      '아직 잘 모르겠어요'
     ]
   },
   {
@@ -394,6 +372,8 @@ const quiz = document.querySelector('#quiz-dialog');
 const quizProgress = document.querySelector('#quiz-progress');
 const quizQuestion = document.querySelector('#quiz-question');
 const quizOptions = document.querySelector('.quiz-options');
+const quizBack = document.querySelector('#quiz-back');
+const quizMeter = document.querySelector('#quiz-meter');
 
 
 function renderQuiz() {
@@ -401,9 +381,15 @@ function renderQuiz() {
 
   quizProgress.textContent = `0${step + 1} / 05`;
   quizQuestion.textContent = questions[step].question;
+  quizQuestion.tabIndex = -1;
+  quizQuestion.focus();
+  quizBack.hidden = step === 0;
+  quizMeter.hidden = false;
+  quizMeter.value = step + 1;
+  quizMeter.setAttribute('aria-valuetext', `${step + 1} / 5 질문`);
 
   quizOptions.innerHTML = questions[step].options
-    .map(option => `<button type="button">${option}</button>`)
+    .map(option => `<button type="button" aria-pressed="${diagnosisAnswers[step] === option}">${option}</button>`)
     .join('');
 
   quizOptions.querySelectorAll('button').forEach(button => {
@@ -542,6 +528,18 @@ function calculateCountryResult() {
 }
 
 
+function buildResultReasons() {
+  const purpose = diagnosisAnswers[0];
+  const priority = diagnosisAnswers[3];
+  const lifestyle = diagnosisAnswers[4];
+  const context = `‘${purpose}’ 목적과 ‘${priority}’ 우선순위, ‘${lifestyle}’ 생활환경을 선택하셨습니다.`;
+  return {
+    dubai: `${context} 두바이의 사업·커리어·교육과 도시 생활 조건을 함께 살펴보세요.`,
+    vietnam: `${context} 베트남의 도시별 주거와 생활비, 장기생활 준비 항목을 비교해 보세요.`,
+    thailand: `${context} 태국의 의료·생활환경과 가족 생활권, 장기체류 준비 항목을 비교해 보세요.`
+  };
+}
+
 function showDiagnosisResult() {
   const ranking = calculateCountryResult();
 
@@ -554,18 +552,18 @@ function showDiagnosisResult() {
     thailand: 'Thailand'
   };
 
-  quizProgress.textContent = 'YOUR RESULT';
+  quizProgress.textContent = '먼저 살펴볼 국가';
+  quizBack.hidden = false;
+  quizMeter.hidden = true;
+  const reasons = buildResultReasons();
 
   quizQuestion.innerHTML = `
-    당신에게는 <strong>${countryName[first]}</strong>와<br>
-    <strong>${countryName[second]}</strong>을<br>
-    우선 비교해보는 것이 좋습니다.
+    <strong>${countryName[first]}</strong>와 <strong>${countryName[second]}</strong>을 먼저 살펴보세요.
   `;
 
   quizOptions.innerHTML = `
     <p class="quiz-result-description">
-      답변하신 목적과 우선순위를 기준으로
-      ILAC이 비교가 필요한 국가를 추천했습니다.
+      ${reasons[first]}<br><br>이동 시기: ${diagnosisAnswers[1]}. 답변을 기준으로 한 탐색 제안이며, 체류 자격과 개인별 조건은 별도로 확인해야 합니다.
     </p>
 
     <button type="button" class="quiz-result-button" id="compare-countries">
@@ -580,31 +578,35 @@ function showDiagnosisResult() {
     /*
      * 비교 페이지에서 진단 결과를 활용할 수 있도록 저장
      */
-    localStorage.setItem(
-      'ilacDiagnosisResult',
-      JSON.stringify({
-        answers: diagnosisAnswers,
-        ranking
-      })
-    );
+    try {
+      localStorage.setItem('ilacDiagnosisResult', JSON.stringify({
+        answers: diagnosisAnswers, ranking, reasons, createdAt: new Date().toISOString()
+      }));
+    } catch { /* Comparison also works without browser storage. */ }
 
     window.location.href = 'compare/index.html';
   });
 }
 
 
+quizBack?.addEventListener('click', () => {
+  if (quizMeter.hidden) step = questions.length - 1;
+  else step = Math.max(0, step - 1);
+  renderQuiz();
+});
+
 const diagnosisOpen = document.querySelector('#diagnosis-open');
 
-if (diagnosisOpen && quiz) {
-  diagnosisOpen.addEventListener('click', () => {
-    step = 0;
-    diagnosisAnswers = [];
-
-    renderQuiz();
-    quiz.showModal();
-  });
+function startQuiz() {
+  if (!quiz) return;
+  step = 0;
+  diagnosisAnswers = [];
+  quiz.showModal();
+  renderQuiz();
 }
-
+diagnosisOpen?.addEventListener('click', startQuiz);
+document.querySelectorAll('[data-start-quiz]').forEach(button => button.addEventListener('click', startQuiz));
+if (new URLSearchParams(location.search).get('restart') === '1') startQuiz();
 
 /* =========================================================
    ESC / DIALOG BACKDROP
@@ -612,8 +614,89 @@ if (diagnosisOpen && quiz) {
 
 document.querySelectorAll('dialog').forEach(dialogElement => {
   dialogElement.addEventListener('click', event => {
-    if (event.target === dialogElement) {
-      dialogElement.close();
-    }
+    const rect = dialogElement.getBoundingClientRect();
+    const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+    if (event.target === dialogElement && outside) dialogElement.close();
   });
+});
+
+/* Sticky navigation: show the section currently in view. */
+const navLinks = [...document.querySelectorAll('header nav a[href^="#"]')];
+if ('IntersectionObserver' in window) {
+  const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+    if (!visible) return;
+    navLinks.forEach(link => {
+      if (link.hash === '#' + visible.target.id) link.setAttribute('aria-current','location');
+      else link.removeAttribute('aria-current');
+    });
+  }, {rootMargin:'-90px 0px -60% 0px', threshold:0});
+  sections.forEach(section => observer.observe(section));
+}
+document.querySelector('#modal-cta')?.addEventListener('click', () => dialog.close());
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && header?.classList.contains('nav-open')) {
+    header.classList.remove('nav-open');
+    menu.setAttribute('aria-expanded','false');
+    menu.setAttribute('aria-label','메뉴 열기');
+    menu.textContent = '☰';
+    menu.focus();
+  }
+});
+document.addEventListener('click', event => {
+  if (header && !header.contains(event.target)) {
+    header.classList.remove('nav-open');
+    menu?.setAttribute('aria-expanded','false');
+    menu?.setAttribute('aria-label','메뉴 열기');
+    if(menu) menu.textContent='☰';
+  }
+});
+
+/* Class-specific introductions. Schedules and registration remain on iLAC. */
+const classDetails = {
+  business:{title:'두바이 사업과 취업',text:'법인과 비자, 현지 일자리와 네트워크를 준비할 때 확인할 내용을 소개합니다.',list:['사업가·취업 준비자를 위한 세션','법인·체류 경로와 전문가 상담 준비','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-business'},
+  education:{title:'국제학교와 교육환경',text:'교육과정과 입학 조건부터 통학과 주거까지 가족의 생활을 함께 살펴봅니다.',list:['자녀 교육과 가족 정착을 준비하는 분','IB·영국식·미국식 교육과정','학교별 조건 확인 · 입학 보장 없음','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-education'},
+  asset:{title:'해외 자산 이전과 세금',text:'이주 전 금융과 자산을 정리하고 세무 전문가에게 확인할 항목을 살펴봅니다.',list:['해외 이주와 자산 이전을 준비하는 분','자산·금융·세금 관련 질문 정리','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-asset-tax'},
+  property:{title:'두바이 주거와 부동산',text:'거주 목적과 투자 목적을 나누어 지역과 주거 선택에 필요한 내용을 살펴봅니다.',list:['두바이 주거와 부동산을 검토하는 분','생활권과 계약 전 확인사항','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-property'},
+  retirement:{title:'은퇴와 새로운 삶',text:'베트남과 태국의 생활환경을 비교하며 장기생활을 준비할 질문을 정리합니다.',list:['은퇴와 장기생활을 검토하는 분','주거·생활비·의료와 가족 생활','확정 일정과 세션은 Academy 전체에서 확인'],url:'https://goilac.com/academy'}
+};
+document.querySelectorAll('[data-class]').forEach(button => button.addEventListener('click', () => {
+  const data = classDetails[button.dataset.class];
+  openDetailDialog({...data,label:'ILAC ACADEMY'});
+  const link = document.querySelector('#modal-cta');
+  link.href = data.url;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.textContent = '일정·신청 안내 확인하기 ↗';
+}));
+document.querySelectorAll('[data-dialog]').forEach(button => button.addEventListener('click', () => {
+  const link = document.querySelector('#modal-cta');
+  link.href = '#contact'; link.removeAttribute('target'); link.removeAttribute('rel');
+  link.textContent = '상담 문의하기 →';
+}));
+
+/* Compose a real email inquiry, with an explicit manual fallback. No fake submission. */
+const consultation = document.querySelector('#consult-dialog');
+document.querySelector('#contact-open')?.addEventListener('click', () => consultation.showModal());
+let inquiryText = '';
+document.querySelector('#consult-form')?.addEventListener('submit', event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  const data = new FormData(form);
+  inquiryText = `iLAC 상담 문의\n\n이름: ${data.get('name')}\n회신 이메일: ${data.get('email')}\n관심 국가: ${data.get('country')}\n관심 분야: ${data.get('purpose')}\n\n문의 내용:\n${data.get('message')}`;
+  document.querySelector('#consult-draft').hidden = false;
+  document.querySelector('#consult-draft-text').value = inquiryText;
+  document.querySelector('#consult-status').textContent = '이메일 앱에서 내용을 확인한 뒤 보내주세요. 앱이 열리지 않으면 아래 내용을 복사할 수 있습니다.';
+  location.href = `mailto:admin@goilac.com?subject=${encodeURIComponent('iLAC 상담 문의')}&body=${encodeURIComponent(inquiryText)}`;
+});
+document.querySelector('#copy-inquiry')?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(inquiryText);
+    document.querySelector('#consult-status').textContent = '문의 내용을 복사했습니다. 이메일에 붙여넣어 보내주세요.';
+  } catch {
+    const field = document.querySelector('#consult-draft-text'); field.focus(); field.select();
+    document.querySelector('#consult-status').textContent = '문의 내용을 선택했습니다. 복사해서 이메일에 붙여넣어 주세요.';
+  }
 });
