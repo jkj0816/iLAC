@@ -349,7 +349,8 @@ const questions = [
       '교육',
       '주거',
       '생활비',
-      '의료·웰니스'
+      '의료·웰니스',
+      '안전·생활환경'
     ]
   },
   {
@@ -574,12 +575,13 @@ function showDiagnosisResult() {
     <p class="quiz-result-description">
       ${reasons[first]}<br><br>${document.documentElement.lang === 'en' ? `Moving timeline: ${ilacEnglish[diagnosisAnswers[1]] || diagnosisAnswers[1]}. This is an exploration suggestion based on your answers. Residency eligibility and individual requirements must be checked separately.` : `이동 시기: ${diagnosisAnswers[1]}. 답변을 기준으로 한 탐색 제안이며, 체류 자격과 개인별 조건은 별도로 확인해야 합니다.`}
     </p>
-
+    <div class="quiz-result-actions"><a class="text-link" href="/content/q/new/index.html" rel="noopener">전문가에게 질문하기</a><a class="text-link" href="#academy" data-result-academy>전체 Academy 보기</a></div>
     <button type="button" class="quiz-result-button" id="compare-countries">
       국가 비교하기
     </button>
   `;
 
+  quizOptions.querySelector('[data-result-academy]')?.addEventListener('click', () => quiz.close());
   const compareButton =
     document.querySelector('#compare-countries');
 
@@ -614,7 +616,7 @@ function startQuiz() {
   renderQuiz();
 }
 diagnosisOpen?.addEventListener('click', startQuiz);
-document.querySelectorAll('[data-start-quiz]').forEach(button => button.addEventListener('click', startQuiz));
+document.querySelectorAll('[data-start-quiz]').forEach(button => button.addEventListener('click', event => { event.preventDefault(); startQuiz(); }));
 if (new URLSearchParams(location.search).get('restart') === '1') startQuiz();
 
 /* =========================================================
@@ -699,18 +701,18 @@ document.addEventListener('click', event => {
 
 /* Class-specific introductions. Schedules and registration remain on iLAC. */
 const classDetails = {
-  business:{title:'두바이 사업과 취업',text:'법인과 비자, 현지 일자리와 네트워크를 준비할 때 확인할 내용을 소개합니다.',list:['사업가·취업 준비자를 위한 세션','법인·체류 경로와 전문가 상담 준비','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-business'},
-  education:{title:'국제학교와 교육환경',text:'교육과정과 입학 조건부터 통학과 주거까지 가족의 생활을 함께 살펴봅니다.',list:['자녀 교육과 가족 정착을 준비하는 분','IB·영국식·미국식 교육과정','학교별 조건 확인 · 입학 보장 없음','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-education'},
-  asset:{title:'해외 자산 이전과 세금',text:'이주 전 금융과 자산을 정리하고 세무 전문가에게 확인할 항목을 살펴봅니다.',list:['해외 이주와 자산 이전을 준비하는 분','자산·금융·세금 관련 질문 정리','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-asset-tax'},
-  property:{title:'두바이 주거와 부동산',text:'거주 목적과 투자 목적을 나누어 지역과 주거 선택에 필요한 내용을 살펴봅니다.',list:['두바이 주거와 부동산을 검토하는 분','생활권과 계약 전 확인사항','무료 · 일정 확정 후 안내'],url:'https://goilac.com/academy/dubai-property'},
-  retirement:{title:'은퇴와 새로운 삶',text:'베트남과 태국의 생활환경을 비교하며 장기생활을 준비할 질문을 정리합니다.',list:['은퇴와 장기생활을 검토하는 분','주거·생활비·의료와 가족 생활','확정 일정과 세션은 Academy 전체에서 확인'],url:'https://goilac.com/academy'}
+  business:{title:'두바이 사업과 취업',text:'법인과 비자, 현지 일자리와 네트워크를 준비할 때 확인할 내용을 소개합니다.',list:['사업가·취업 준비자를 위한 세션','법인·체류 경로와 전문가 상담 준비','무료 · 일정 확정 후 안내'],url:'/content/academy/dubai-business/index.html'},
+  education:{title:'국제학교와 교육환경',text:'교육과정과 입학 조건부터 통학과 주거까지 가족의 생활을 함께 살펴봅니다.',list:['자녀 교육과 가족 정착을 준비하는 분','IB·영국식·미국식 교육과정','학교별 조건 확인 · 입학 보장 없음','무료 · 일정 확정 후 안내'],url:'/content/academy/dubai-education/index.html'},
+  asset:{title:'해외 자산 이전과 세금',text:'이주 전 금융과 자산을 정리하고 세무 전문가에게 확인할 항목을 살펴봅니다.',list:['해외 이주와 자산 이전을 준비하는 분','자산·금융·세금 관련 질문 정리','무료 · 일정 확정 후 안내'],url:'/content/academy/dubai-asset-tax/index.html'},
+  property:{title:'두바이 주거와 부동산',text:'거주 목적과 투자 목적을 나누어 지역과 주거 선택에 필요한 내용을 살펴봅니다.',list:['두바이 주거와 부동산을 검토하는 분','생활권과 계약 전 확인사항','무료 · 일정 확정 후 안내'],url:'/content/academy/dubai-property/index.html'},
+  retirement:{title:'은퇴와 새로운 삶',text:'베트남과 태국의 생활환경을 비교하며 장기생활을 준비할 질문을 정리합니다.',list:['은퇴와 장기생활을 검토하는 분','주거·생활비·의료와 가족 생활','확정 일정과 세션은 Academy 전체에서 확인'],url:'/content/academy/index.html'}
 };
 document.querySelectorAll('[data-class]').forEach(button => button.addEventListener('click', () => {
   const data = classDetails[button.dataset.class];
   openDetailDialog({...data,label:'ILAC ACADEMY'});
   const link = document.querySelector('#modal-cta');
   link.href = data.url;
-  link.target = '_blank';
+  link.target = '_self';
   link.rel = 'noopener';
   link.textContent = '일정·신청 안내 확인하기';
 }));

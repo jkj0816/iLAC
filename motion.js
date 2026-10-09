@@ -66,3 +66,15 @@
   const button = document.querySelector('.country-finder-float');
   if (button) button.hidden = false;
 })();
+
+(() => {
+ const button = document.querySelector('.country-guide-toggle');
+ const panel = document.querySelector('#country-links');
+ if (!button || !panel) return;
+ button.addEventListener('click', () => {
+   const open = button.getAttribute('aria-expanded') !== 'true';
+   button.setAttribute('aria-expanded',String(open));
+   panel.hidden = !open;
+   button.querySelector('span').textContent = open ? '−' : '+';
+ });
+})();

@@ -461,3 +461,109 @@ html[lang=en] .platform-benefits .section-head h2 { white-space:normal; }
   transition:transform .22s cubic-bezier(.22,1,.36,1),width .22s cubic-bezier(.22,1,.36,1);
 }
 @media(prefers-reduced-motion:reduce) { #site-nav .nav-indicator { transition:none; } }
+
+/* One service section, with stage-specific details and one consultation action. */
+#services { background:#edf7fb; }
+#education { background:#fff; }
+#services .timeline-grid article { display:flex; flex-direction:column; }
+.service-detail-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:auto; }
+.service-detail-actions .text-link { padding:10px 14px; min-height:44px; border:1px solid #bfd3e8; border-radius:10px; background:#fff; color:var(--ink); font-size:14px; text-decoration:none; }
+.service-detail-actions .text-link:hover { background:#fff; border-color:#b4cfea; box-shadow:0 9px 26px #0f285414; }
+
+/* Original iLAC skyline at the transition to the footer. */
+main { padding-bottom:0; }
+.footer-skyline { position:relative; width:100%; height:clamp(240px,32vw,480px); overflow:hidden; background:#edf7fb; }
+.footer-skyline img { width:100%; height:100%; object-fit:cover; object-position:center 60%; }
+.footer-skyline::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,#fff 0%,transparent 24%,transparent 85%,#fff 100%); pointer-events:none; }
+
+/* Skyline lives inside the footer, behind a readable light overlay. */
+.site-footer {
+  background:linear-gradient(to bottom,rgba(255,255,255,.94),rgba(255,255,255,.8)),url('https://goilac.com/_next/static/immutable/media/footer-skyline.23l0s01c_36yx.webp') center 65% / cover no-repeat;
+  border-top:0;
+}
+
+/* Country discovery in one place, without a second list section. */
+#countries .country-guide-fold { margin-top:28px; border:0; }
+.country-guide-fold > summary { width:fit-content; margin:auto; gap:18px; padding:12px 24px; background:#fff; border:1px solid #bfd3e8; border-radius:12px; font-weight:600; }
+.country-guide-fold .country-links-grid { margin-top:24px; }
+.country-guide-fold > summary:hover { box-shadow:0 9px 26px #0f285414; }
+.quiz-result-actions { display:flex; flex-wrap:wrap; gap:16px; grid-column:1/-1; }
+#purpose { background:#fff; }
+#countries { background:#edf7fb; }
+#about { background:#fff; }
+#services { background:#edf7fb; }
+#education { background:#fff; }
+
+/* Country flags sit beside names while existing purpose icons remain. */
+.country-flag { display:inline-flex; align-items:center; justify-content:center; font-size:27px; line-height:1; flex-shrink:0; font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif; }
+#countries .country-entry-name { gap:10px; align-items:center; }
+.country-links-grid a { justify-content:flex-start; gap:12px; }
+.country-links-grid .country-flag { font-size:24px; }
+@media(max-width:700px) { .country-flag { font-size:24px; } .country-links-grid .country-flag { font-size:22px; } }
+
+/* A distinct skyline footer with clear, readable company information. */
+.site-footer {
+  background:linear-gradient(90deg,rgba(15,40,84,.86),rgba(15,40,84,.56)),url('https://goilac.com/_next/static/immutable/media/footer-skyline.23l0s01c_36yx.webp') center 65% / cover no-repeat;
+  color:#fff; border-top:4px solid #bfd3e8; padding-top:48px;
+}
+.site-footer .footer-top { border-bottom-color:rgba(255,255,255,.3); }
+.site-footer .footer-top p,.site-footer .footer-bottom p,.site-footer a { color:#fff; }
+.site-footer .logo { background:#fff; border-radius:10px; padding:8px; }
+.site-footer a:hover { color:#d6e7ff; }
+
+.country-guide-toggle { display:inline-flex; align-items:center; justify-content:center; gap:18px; min-height:50px; padding:12px 24px; border:1px solid #bfd3e8; border-radius:12px; background:#fff; color:var(--ink); font-weight:600; transition:box-shadow .25s,border-color .25s; }
+.country-guide-toggle:hover { background:#fff; border-color:#b4cfea; box-shadow:0 9px 26px #0f285414; }
+.country-guide-toggle span { font-size:20px; line-height:1; }
+@media(max-width:700px) { .country-guide-toggle { width:100%; } }
+
+/* Bright company information above a compact skyline, as in the reference. */
+.site-footer { background:#f5ffff; color:var(--ink); border-top:1px solid #d8e6ed; padding:36px var(--gutter) 0; }
+.site-footer .footer-top { border-bottom-color:#d8e6ed; padding-bottom:20px; }
+.site-footer .footer-top p,.site-footer .footer-bottom p { color:var(--sage); }
+.site-footer a { color:var(--ink); }
+.site-footer a:hover { color:var(--gold); }
+.site-footer .logo { background:transparent; padding:0; border-radius:0; }
+.site-footer .footer-bottom { padding-top:20px; padding-bottom:28px; }
+.footer-photo { position:relative; margin-inline:calc(-1 * var(--gutter)); height:clamp(160px,18vw,260px); overflow:hidden; }
+.footer-photo img { width:100%; height:100%; object-fit:cover; object-position:center 60%; }
+.footer-photo::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,#f5ffff 0%,transparent 28%); pointer-events:none; }
+@media(max-width:700px) { .footer-photo { height:160px; } }
+
+/* Restrained country cards: flags, clear text and compact actions. */
+#countries .country-entry { border-radius:12px; background:#fff; padding:28px; box-shadow:none; }
+#countries .country-entry .country-entry-name { padding-right:0; min-height:32px; }
+#countries .country-entry h3 { margin:24px 0 14px; font-size:24px; }
+#countries .country-entry p { margin-bottom:22px; }
+#countries .country-entry p strong { color:var(--sage); font-weight:500; }
+#countries .country-entry-topics { padding-top:16px; }
+#countries .country-entry-cta { margin-top:18px; border-radius:8px; }
+#countries .country-entry.sequence-visible { animation:day-row-in .65s cubic-bezier(.23,1,.32,1) both; animation-delay:var(--sequence-delay); }
+#countries .country-entry:hover { background:#fafcfe; box-shadow:0 6px 18px #0f28540a; }
+@media(prefers-reduced-motion:reduce) { #countries .country-entry.sequence-visible { animation:none; } }
+
+/* Let headings use available width rather than forced line breaks. */
+.intro .title-line { display:inline; white-space:normal; }
+.hero-copy h1,.journey-copy h2,.journey-day-heading h2,.section-head h2,.education-copy h2,.ask-section h2,.contact h2 { text-wrap:pretty; white-space:normal; }
+#services .section-head,#academy .section-head,#stories .section-head { display:flex; flex-direction:column; gap:16px; align-items:flex-start; }
+#services .section-head > p,#academy .section-head > p,#stories .section-head > p { max-width:800px; margin:0; }
+
+/* Keep the hero platform name together on its own line. */
+.hero-copy h1 em { display: block; }
+
+/* Wrap highlighted heading phrases as a group when space permits. */
+main h1 em, main h2 em { display:inline-block; max-width:100%; vertical-align:baseline; text-wrap:pretty; }
+.hero-copy h1 em { display:block; }
+
+/* Mobile navigation remains outside the header layout. */
+@media(max-width:960px){
+ .site-header{display:grid;grid-template-columns:44px auto 1fr;gap:10px;min-height:72px;padding:10px 16px;}
+ .site-header>.menu{grid-column:1;grid-row:1;order:-1;width:44px;height:44px;min-width:44px;padding:0;border:0;border-radius:8px;background:transparent;font-size:26px;line-height:1;color:var(--ink);}
+ .site-header>.logo{grid-column:2;grid-row:1;width:100px;height:42px;}
+ .site-header>.header-actions{grid-column:3;grid-row:1;margin:0;justify-self:end;gap:0;}
+ .site-header .language-switcher{gap:0;}
+ .site-header .language-switcher .lang{min-width:34px;font-size:15px;padding:4px;}
+ .site-header #site-nav{display:none;position:absolute;top:100%;left:0;right:0;width:auto;margin:0;padding:12px 16px 16px;max-height:calc(100dvh - 72px);overflow-y:auto;background:#fff;box-shadow:0 12px 24px #0f285414;border-bottom:1px solid var(--line);}
+ .site-header.nav-open #site-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;}
+ .site-header #site-nav>a{display:flex;align-items:center;width:100%;min-height:48px;padding:12px 16px;text-align:left;font-size:16px;line-height:1.5;border-radius:8px;}
+ .site-header #site-nav .nav-indicator{display:none;}
+}
