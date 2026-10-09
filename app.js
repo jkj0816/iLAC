@@ -151,15 +151,15 @@ const localizedEnglish = {
   'header nav a:nth-child(4)': 'EDUCATION',
   'header nav a:nth-child(5)': 'ACADEMY',
 
-  '.nav-cta': 'START A CONSULTATION　↗',
+  '.nav-cta': 'START A CONSULTATION',
 
   '.hero h1': 'Design your life<br><em>abroad.</em>',
 
   '.hero-copy>span':
     'Compare countries by purpose and connect every step—from preparation to a confident life on the ground.',
 
-  '.hero-copy .primary': 'FIND YOUR COUNTRY　→',
-  '.hero-copy .secondary': 'ASK AN EXPERT　↗',
+  '.hero-copy .primary': 'FIND YOUR COUNTRY',
+  '.hero-copy .secondary': 'ASK AN EXPERT',
 
   '.intro h2':
     'Turn complex relocation<br>into <em>one plan.</em>',
@@ -177,7 +177,7 @@ const localizedEnglish = {
     'Your purpose changes<br><em>the right destination.</em>',
 
   '.countries .section-head a':
-    'FIND YOUR COUNTRY　→',
+    'FIND YOUR COUNTRY',
 
   '.diagnosis h2':
     'Not sure where<br>to begin?',
@@ -186,7 +186,7 @@ const localizedEnglish = {
     'Five questions point you to the countries, content and consultation route that fit your priorities.',
 
   '.diagnosis .primary':
-    'FIND YOUR COUNTRY　→',
+    'FIND YOUR COUNTRY',
 
   '.diagnosis small':
     'NO PERSONAL DETAILS REQUIRED',
@@ -195,7 +195,7 @@ const localizedEnglish = {
     'Learn, ask, and<br><em>get ready.</em>',
 
   '.academy .section-head a':
-    'VIEW ALL CLASSES　↗',
+    'VIEW ALL CLASSES',
 
   '.faq h2':
     'When search alone<br>is not enough.',
@@ -204,7 +204,7 @@ const localizedEnglish = {
     'Questions lead naturally to expert answers, relevant content, Academy sessions and consultation.',
 
   '.faq .primary':
-    'ASK AN EXPERT　→',
+    'ASK AN EXPERT',
 
   '.contact h2':
     'A new life deserves<br><em>more than a solo plan.</em>',
@@ -213,7 +213,7 @@ const localizedEnglish = {
     'A consultation is the first step to understanding what is possible.',
 
   '.contact .primary':
-    'BEGIN A CONSULTATION　→'
+    'BEGIN A CONSULTATION'
 };
 
 
@@ -389,12 +389,12 @@ function renderQuiz() {
   quizMeter.setAttribute('aria-valuetext', `${step + 1} / 5 질문`);
 
   quizOptions.innerHTML = questions[step].options
-    .map(option => `<button type="button" aria-pressed="${diagnosisAnswers[step] === option}">${option}</button>`)
+    .map(option => `<button type="button" data-original="${option}" aria-pressed="${diagnosisAnswers[step] === option}">${option}</button>`)
     .join('');
 
   quizOptions.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', () => {
-      diagnosisAnswers[step] = button.textContent;
+      diagnosisAnswers[step] = button.dataset.original;
 
       if (step < questions.length - 1) {
         step++;
@@ -532,6 +532,15 @@ function buildResultReasons() {
   const purpose = diagnosisAnswers[0];
   const priority = diagnosisAnswers[3];
   const lifestyle = diagnosisAnswers[4];
+  if (document.documentElement.lang === 'en') {
+    const en = value => ilacEnglish[value] || value;
+    const context = `You selected ${en(purpose)}, prioritized ${en(priority)}, and prefer ${en(lifestyle)}.`;
+    return {
+      dubai: `${context} Explore Dubai's business, career, education and urban living options.`,
+      vietnam: `${context} Compare housing, living costs and long-term planning across Vietnam's cities.`,
+      thailand: `${context} Compare healthcare, family neighborhoods and long-term residency options in Thailand.`
+    };
+  }
   const context = `‘${purpose}’ 목적과 ‘${priority}’ 우선순위, ‘${lifestyle}’ 생활환경을 선택하셨습니다.`;
   return {
     dubai: `${context} 두바이의 사업·커리어·교육과 도시 생활 조건을 함께 살펴보세요.`,
@@ -563,11 +572,11 @@ function showDiagnosisResult() {
 
   quizOptions.innerHTML = `
     <p class="quiz-result-description">
-      ${reasons[first]}<br><br>이동 시기: ${diagnosisAnswers[1]}. 답변을 기준으로 한 탐색 제안이며, 체류 자격과 개인별 조건은 별도로 확인해야 합니다.
+      ${reasons[first]}<br><br>${document.documentElement.lang === 'en' ? `Moving timeline: ${ilacEnglish[diagnosisAnswers[1]] || diagnosisAnswers[1]}. This is an exploration suggestion based on your answers. Residency eligibility and individual requirements must be checked separately.` : `이동 시기: ${diagnosisAnswers[1]}. 답변을 기준으로 한 탐색 제안이며, 체류 자격과 개인별 조건은 별도로 확인해야 합니다.`}
     </p>
 
     <button type="button" class="quiz-result-button" id="compare-countries">
-      국가 비교하기　→
+      국가 비교하기
     </button>
   `;
 
@@ -620,20 +629,55 @@ document.querySelectorAll('dialog').forEach(dialogElement => {
   });
 });
 
-/* Sticky navigation: show the section currently in view. */
-const navLinks = [...document.querySelectorAll('header nav a[href^="#"]')];
-if ('IntersectionObserver' in window) {
-  const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
-  const observer = new IntersectionObserver(entries => {
-    const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-    if (!visible) return;
-    navLinks.forEach(link => {
-      if (link.hash === '#' + visible.target.id) link.setAttribute('aria-current','location');
-      else link.removeAttribute('aria-current');
+/* A single sliding indicator follows clicks and the current section. */
+(() => {
+  const nav = document.querySelector('#site-nav');
+  if (!nav) return;
+  const links = [...nav.querySelectorAll('a[href^="#"]')];
+  const marker = document.createElement('span');
+  marker.className = 'nav-indicator'; marker.setAttribute('aria-hidden','true');
+  nav.append(marker);
+  let active = links[0], hovered = null, lockedUntil = 0, pending = false;
+  const move = link => {
+    if (!link) return;
+    active = link;
+    links.forEach(item => item === link ? item.setAttribute('aria-current','location') : item.removeAttribute('aria-current'));
+    draw(hovered || link);
+  };
+  const draw = link => {
+    const rect = link.getBoundingClientRect(), base = nav.getBoundingClientRect();
+    marker.style.width = `${rect.width}px`;
+    marker.style.transform = `translateX(${rect.left-base.left}px)`;
+  };
+  links.forEach(link => {
+    link.addEventListener('pointerenter', () => { hovered = link; draw(link); });
+    link.addEventListener('focus', () => draw(link));
+    link.addEventListener('blur', () => draw(hovered || active));
+  });
+  nav.addEventListener('pointerleave', () => { hovered = null; draw(active); });
+  links.forEach(link => link.addEventListener('click', () => {
+    lockedUntil = performance.now() + 2000;
+    move(link);
+  }));
+  const update = () => {
+    pending = false;
+    if (performance.now() < lockedUntil) return;
+    const offset = (document.querySelector('.site-header')?.offsetHeight || 80) + 100;
+    let current = links[0];
+    links.forEach(link => {
+      const section = document.querySelector(link.hash);
+      if (section && section.getBoundingClientRect().top <= offset) current = link;
     });
-  }, {rootMargin:'-90px 0px -60% 0px', threshold:0});
-  sections.forEach(section => observer.observe(section));
-}
+    move(current);
+  };
+  window.addEventListener('scroll', () => {
+    if (!pending) { pending = true; requestAnimationFrame(update); }
+  }, {passive:true});
+  window.addEventListener('scrollend', () => { lockedUntil = 0; update(); });
+  new ResizeObserver(() => move(active)).observe(nav);
+  document.fonts?.ready.then(() => move(active));
+  move(active); update();
+})();
 document.querySelector('#modal-cta')?.addEventListener('click', () => dialog.close());
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && header?.classList.contains('nav-open')) {
@@ -668,12 +712,12 @@ document.querySelectorAll('[data-class]').forEach(button => button.addEventListe
   link.href = data.url;
   link.target = '_blank';
   link.rel = 'noopener';
-  link.textContent = '일정·신청 안내 확인하기 ↗';
+  link.textContent = '일정·신청 안내 확인하기';
 }));
 document.querySelectorAll('[data-dialog]').forEach(button => button.addEventListener('click', () => {
   const link = document.querySelector('#modal-cta');
   link.href = '#contact'; link.removeAttribute('target'); link.removeAttribute('rel');
-  link.textContent = '상담 문의하기 →';
+  link.textContent = '상담 문의하기';
 }));
 
 /* Compose a real email inquiry, with an explicit manual fallback. No fake submission. */
