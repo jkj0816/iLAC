@@ -1,0 +1,752 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+/* Shared iLAC brand and final responsive corrections. */
+:root {
+  --ink:#0f2854;
+  --paper:#f5ffff;
+  --cream:#fff;
+  --gold:#2166db;
+  --sage:#4e6985;
+  --line:#d8e6ed
+}
+
+.thailand-page .site-header {
+  position:sticky;
+  background:var(--paper)
+}
+
+.thailand-opening .country-image {
+  position:relative;
+  margin:0;
+  background:#edf6f6!important;
+  height:auto!important;
+  aspect-ratio:6/5;
+  overflow:hidden;
+  border-radius:8px
+}
+
+.country-image img {
+  height:100%;
+  width:100%;
+  object-fit:cover
+}
+
+.country-image figcaption {
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:12px 16px;
+  background:linear-gradient(transparent,rgba(15,40,84,.8));
+  color:white;
+  font-size:11px
+}
+
+.country-image figcaption a {
+  color:white
+}
+
+.country-panel {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  align-items:center;
+  min-width:0
+}
+
+.country-panel h1 {
+  font-family:var(--serif);
+  font-weight:500;
+  font-size:clamp(30px,3vw,44px);
+  line-height:1.5;
+  word-break:keep-all;
+  margin:18px 0 28px
+}
+
+.country-panel ul {
+  list-style:none;
+  padding:0;
+  margin:0
+}
+
+.country-panel li {
+  padding:13px 0;
+  border-top:1px solid var(--line);
+  font-size:15px
+}
+
+.country-panel>div>p {
+  font:11px var(--mono);
+  letter-spacing:.12em;
+  color:var(--sage)
+}
+
+.country-panel>* {
+  min-width:0
+}
+
+.thailand-page .academy-cards article:first-child {
+  background:#eaf3fb;
+  color:var(--ink);
+  border:1px solid var(--line)
+}
+
+.thailand-page .academy-cards {
+  margin-top:40px
+}
+
+.thailand-page .academy-cards h3 {
+  margin-top:24px
+}
+
+.thailand-page .academy-cards a {
+  margin-top:auto;
+  min-height:44px;
+  display:flex;
+  align-items:center
+}
+
+.thailand-page .contact {
+  text-align:center
+}
+
+.thailand-page .contact h2 {
+  margin-bottom:20px
+}
+
+.thailand-page .contact p {
+  margin-inline:auto
+}
+
+.thailand-page .faq {
+  color:var(--ink)
+}
+
+.thailand-page .purpose-section,.thailand-page .preparation-section,.thailand-page .process-section {
+  padding-inline:var(--gutter)
+}
+
+.thailand-page .faq details p {
+  color:var(--sage)
+}
+
+.thailand-page .purpose-options>a {
+  padding:28px 24px 24px 0
+}
+
+.thailand-page .process-steps {
+  gap:24px
+}
+
+.preparation-group {
+  scroll-margin-top:110px
+}
+
+.thailand-page h2 {
+  font-size:clamp(30px,3vw,46px)!important
+}
+
+.thailand-page .section-head a {
+  justify-self:start
+}
+
+.thailand-page .purpose-options>a,.thailand-page .process-steps>article,.preparation-group {
+  min-width:0
+}
+
+@media(max-width:700px) {
+  .country-panel {
+    grid-template-columns:1fr;
+    gap:26px
+  }
+
+  .thailand-opening .country-image {
+    aspect-ratio:4/3;
+    max-height:300px
+  }
+
+  .thailand-opening h1 {
+    font-size:29px
+  }
+
+  .opening-actions {
+    gap:16px
+  }
+
+  .thailand-page .purpose-options,.thailand-page .preparation-grid,.thailand-page .preparation-heading {
+    grid-template-columns:1fr
+  }
+
+  .thailand-page .purpose-section,.thailand-page .preparation-section,.thailand-page .process-section {
+    padding-block:55px
+  }
+
+  .thailand-page .purpose-options>a {
+    padding:22px 0
+  }
+
+  .thailand-page .section-head a {
+    margin-top:14px
+  }
+
+  .preparation-group {
+    padding:24px
+  }
+
+  .thailand-page .process-steps {
+    grid-template-columns:1fr 1fr
+  }
+
+  .thailand-page .purpose-options h3 {
+    font-size:23px
+  }
+
+}
+
+@media(max-width:420px) {
+  .thailand-page .process-steps {
+    grid-template-columns:1fr
+  }
+
+  .thailand-page .process-steps h3 {
+    margin-top:12px
+  }
+
+}
+
+body {
+  word-break:keep-all;
+  overflow-wrap:break-word
+}
+
+.preparation-group {
+  background:#fff;
+  border-color:var(--line)
+}
+
+.preparation-group:nth-child(3)::before {
+  background:#5a82b4
+}
+
+.preparation-group:nth-child(4)::before {
+  background:#315990
+}
+
+.preparation-group>.label,.preparation-group summary span {
+  background:#edf4fb;
+  color:var(--sage)
+}
+
+.preparation-group details[open] summary {
+  color:var(--gold)
+}
+
+.preparation-group details[open] summary span {
+  background:#dceafa
+}
+
+.preparation-group summary:hover {
+  background:#f1f6fb
+}
+
+@media(max-width:700px) {
+  .life-intro h2 br {
+    display:block
+  }
+
+  .country-entry h3 br {
+    display:block
+  }
+
+}
+
+/* Reference landing: bright mint, blue accents, friendly sans-serif typography. */
+:root {
+  --sans:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --serif:var(--sans);
+  --gold:#2166db;
+  --paper:#f5ffff;
+  --line:#dfe9ed
+}
+
+h1,h2 {
+  font-family:var(--sans);
+  font-weight:700;
+  letter-spacing:-.045em
+}
+
+h3 {
+  font-family:var(--sans)
+}
+
+.label {
+  color:#526783
+}
+
+.site-header {
+  box-shadow:none
+}
+
+.primary,.nav-cta {
+  border-radius:12px
+}
+
+.hero.reference-hero {
+  background:linear-gradient(125deg,#f5ffff,#edf9fc);
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  gap:50px;
+  min-height:650px;
+  padding-block:70px
+}
+
+.reference-hero .hero-copy {
+  max-width:660px
+}
+
+.reference-hero .hero-copy h1 {
+  font-size:clamp(36px,3.4vw,54px);
+  line-height:1.45
+}
+
+.reference-hero .hero-copy>span {
+  max-width:620px;
+  display:block;
+  color:#526783;
+  font-size:17px;
+  line-height:1.9
+}
+
+.hero-visual {
+  display:flex;
+  align-items:center;
+  flex-direction:column;
+  min-width:0
+}
+
+.globe-scene {
+  position:relative;
+  width:min(100%,440px);
+  aspect-ratio:1
+}
+
+.globe-halo {
+  position:absolute;
+  inset:14%;
+  border-radius:50%;
+  background:#dff7fc;
+  filter:blur(18px)
+}
+
+.globe-image {
+  position:absolute;
+  width:66%;
+  height:66%;
+  object-fit:contain;
+  top:17%;
+  left:17%;
+  animation:globe-breathe 5s ease-in-out infinite
+}
+
+.orbit-icon {
+  position:absolute;
+  width:13%;
+  height:13%;
+  object-fit:contain;
+  animation:icon-float 4s ease-in-out infinite
+}
+
+.orbit-0 {
+  left:10%;
+  top:5%;
+  transform:rotate(-18deg)
+}
+
+.orbit-1 {
+  right:7%;
+  top:6%;
+  animation-delay:-.5s
+}
+
+.orbit-2 {
+  left:2%;
+  top:35%;
+  animation-delay:-1s
+}
+
+.orbit-3 {
+  right:1%;
+  top:34%;
+  animation-delay:-1.5s
+}
+
+.orbit-4 {
+  left:1%;
+  bottom:24%;
+  animation-delay:-2s
+}
+
+.orbit-5 {
+  right:0;
+  bottom:25%;
+  animation-delay:-2.5s
+}
+
+.orbit-6 {
+  left:11%;
+  bottom:4%;
+  animation-delay:-3s
+}
+
+.orbit-7 {
+  right:9%;
+  bottom:3%;
+  animation-delay:-3.5s
+}
+
+
+
+.motion-paused .orbit-icon,.motion-paused .globe-image {
+  animation-play-state:paused
+}
+
+.motion-reveal.is-revealed {
+  animation:section-appear .6s cubic-bezier(.23,1,.32,1) both;
+  animation-delay:var(--motion-delay,0ms)
+}
+
+.motion-reveal:not(.is-revealed) {
+  opacity:0;
+  transform:translateY(16px)
+}
+
+.motion-reveal:focus-within {
+  opacity:1;
+  transform:none
+}
+
+.purpose-card,.country-entry,.benefit-card,.academy-cards article,.story-grid a {
+  border-radius:16px
+}
+
+.country-entry {
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+  background:#fff
+}
+
+.country-entry:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px #0f28540b
+}
+
+.country-entry.vietnam {
+  background:#edf7fa
+}
+
+.life-intro {
+  background:var(--paper)
+}
+
+.life-notes p {
+  border-radius:12px;
+  padding-inline:20px;
+  background:#fff;
+  margin-bottom:12px
+}
+
+.life-notes p:last-child {
+  border-bottom:1px solid var(--line)
+}
+
+.solution-grid {
+  border-radius:16px;
+  overflow:hidden
+}
+
+.country-panel h1 {
+  font-family:var(--sans);
+  font-weight:700
+}
+
+.thailand-page .preparation-group h3 {
+  font-family:var(--sans)
+}
+
+.thailand-page .country-panel h1 {
+  font-size:clamp(29px,3vw,42px)
+}
+
+@keyframes icon-float {
+  0%,100% {
+    translate:0 0;
+    rotate:-5deg
+  }
+
+  50% {
+    translate:0 -10px;
+    rotate:5deg
+  }
+
+}
+
+@keyframes globe-breathe {
+  0%,100% {
+    transform:translateY(0)
+  }
+
+  50% {
+    transform:translateY(-6px)
+  }
+
+}
+
+@keyframes section-appear {
+  from {
+    opacity:0;
+    transform:translateY(16px)
+  }
+
+  to {
+    opacity:1;
+    transform:translateY(0)
+  }
+
+}
+
+@media(max-width:960px) {
+  .hero.reference-hero {
+    gap:20px;
+    grid-template-columns:1.2fr 1fr
+  }
+
+  .reference-hero .hero-copy h1 {
+    font-size:38px
+  }
+
+  .reference-hero .hero-copy>span {
+    font-size:15px
+  }
+
+  .reference-hero .hero-copy>span br {
+    display:none
+  }
+
+}
+
+@media(max-width:700px) {
+  .hero.reference-hero {
+    grid-template-columns:1fr;
+    gap:24px;
+    padding-block:44px;
+    text-align:center
+  }
+
+  .reference-hero .hero-copy h1 {
+    font-size:clamp(28px,7.5vw,40px)
+  }
+
+  .reference-hero .hero-copy>div {
+    align-items:center
+  }
+
+  .reference-hero .hero-copy>span {
+    font-size:15px
+  }
+
+  .reference-hero .hero-copy>p {
+    font-size:10px
+  }
+
+  .hero-visual {
+    grid-row:2
+  }
+
+  .globe-scene {
+    width:min(100%,310px)
+  }
+
+
+
+  .hero.reference-hero .primary {
+    width:auto;
+    min-width:220px
+  }
+
+  .reference-hero .hero-copy>div {
+    margin-top:24px
+  }
+
+  .site-header {
+    gap:12px
+  }
+
+  .life-intro h2 {
+    font-size:32px
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .orbit-icon,.globe-image,.motion-reveal.is-revealed {
+    animation:none
+  }
+
+  .motion-reveal:not(.is-revealed) {
+    opacity:1;
+    transform:none
+  }
+
+  .country-entry:hover {
+    transform:none
+  }
+
+
+
+}
+
+.life-notes p {
+  display:flex;
+  align-items:center;
+  gap:16px
+}
+
+.life-notes img {
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  flex-shrink:0
+}
+
+.life-notes span {
+  margin:0;
+  font-size:10px
+}
+
+@media(max-width:700px) {
+  .hero.reference-hero {
+    gap:20px;
+    padding-block:34px
+  }
+
+  .reference-hero .hero-copy {
+    display:contents
+  }
+
+  .reference-hero .hero-copy>p {
+    grid-row:1;
+    margin:0
+  }
+
+  .reference-hero .hero-copy h1 {
+    grid-row:2;
+    margin:0
+  }
+
+  .reference-hero .hero-copy>span {
+    grid-row:4
+  }
+
+  .reference-hero .hero-copy>div {
+    grid-row:5;
+    margin:0;
+    justify-self:center
+  }
+
+  .reference-hero .hero-visual {
+    grid-row:3
+  }
+
+  .globe-scene {
+    width:min(100%,280px)
+  }
+
+
+
+  .life-notes p {
+    font-size:15px;
+    gap:12px
+  }
+
+  .life-notes img {
+    width:38px;
+    height:38px
+  }
+
+  .life-notes span {
+    display:none
+  }
+
+}
+/* Hero actions and the inline life-after-settlement story. */
+.hero .expert-cta {
+  min-height:48px;
+  padding:13px 22px;
+  border:1px solid var(--ink);
+  border-radius:12px;
+  background:#fff;
+  color:var(--ink);
+  font-size:15px;
+  font-weight:600;
+  line-height:1.5;
+  gap:12px;
+}
+.hero .expert-cta:hover { background:#edf4fb; }
+.hero.reference-hero .hero-copy>div>.primary { min-width:220px; }
+.life-intro.life-journey { display:block; background:var(--paper); }
+.journey-intro { display:grid; grid-template-columns:1.1fr 1fr; gap:80px; align-items:center; }
+.journey-copy h2 { font-size:clamp(30px,3vw,44px); line-height:1.5; margin-bottom:24px; }
+.journey-copy strong { color:var(--ink); font-weight:600; }
+.life-journey .journey-copy br,.life-journey .journey-plan br { display:block; }
+.journey-plan { position:relative; padding:38px; border:1px solid var(--line); border-radius:20px; background:#fff; }
+.journey-plan>img { position:absolute; width:65px; height:65px; object-fit:contain; top:28px; right:28px; }
+.journey-plan .label { padding-right:70px; }
+.journey-plan h3 { font-size:clamp(28px,2.5vw,36px); line-height:1.5; margin:22px 0 18px; }
+.journey-plan p:last-child { font-size:15px; line-height:1.9; margin:0; }
+.journey-plan strong { color:var(--ink); }
+.journey-day { border-top:1px solid var(--line); margin-top:54px; padding-top:44px; }
+.journey-day-heading { margin-bottom:26px; }
+.journey-day-heading h3 { font-size:clamp(25px,2.4vw,32px); line-height:1.5; margin:0; }
+.life-journey .journey-day-heading br { display:block; }
+.journey-timeline { list-style:none; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; padding:0; margin:0; }
+.journey-timeline li { min-width:0; padding:24px; background:#fff; border:1px solid var(--line); border-radius:16px; }
+.journey-time { display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--gold); }
+.journey-time::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+.journey-timeline img { width:60px; height:60px; object-fit:contain; margin:26px 0 20px; }
+.life-journey .journey-timeline p { font-size:16px; line-height:1.8; color:var(--ink); margin:0; }
+.journey-timeline strong { font-weight:600; }
+@media(max-width:960px) {
+  .journey-intro { gap:34px; }
+  .journey-plan { padding:28px; }
+  .journey-timeline { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:700px) {
+  .journey-intro { grid-template-columns:1fr; gap:24px; }
+  .journey-copy h2 { font-size:30px; }
+  .journey-copy p:not(.label) { font-size:15px; }
+  .journey-plan { padding:26px; }
+  .journey-plan>img { width:50px; height:50px; right:22px; top:22px; }
+  .journey-plan h3 { font-size:27px; }
+  .journey-day { margin-top:36px; padding-top:30px; }
+  .journey-day-heading h3 { font-size:26px; }
+  .journey-timeline { gap:14px; }
+  .journey-timeline li { padding:20px; }
+  .life-journey .journey-timeline p { font-size:14px; }
+  .hero.reference-hero .hero-copy>div>.primary { width:100%; max-width:330px; }
+}
+@media(max-width:420px) {
+  .journey-timeline { grid-template-columns:1fr; }
+  .journey-timeline li { display:grid; grid-template-columns:1fr 52px; gap:12px 18px; align-items:center; }
+  .journey-timeline img { grid-column:2; grid-row:1/3; width:52px; height:52px; margin:0; }
+  .journey-timeline p { grid-column:1; }
+}
+
+/* One typeface throughout the landing page, guides and platform. */
+:root {
+  --sans:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --serif:var(--sans);
+  --mono:var(--sans);
+}
+body,body h1,body h2,body h3,body h4,body p,body a,body span,body b,body strong,body em,
+body button,body input,body select,body textarea,body label,body summary,body li,
+body th,body td,body caption,body small,body legend {
+  font-family:var(--sans);
+}
