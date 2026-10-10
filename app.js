@@ -530,75 +530,71 @@ function calculateCountryResult() {
 
 
 function buildResultReasons() {
-  const purpose = diagnosisAnswers[0];
-  const priority = diagnosisAnswers[3];
-  const lifestyle = diagnosisAnswers[4];
-  if (document.documentElement.lang === 'en') {
-    const en = value => ilacEnglish[value] || value;
-    const context = `You selected ${en(purpose)}, prioritized ${en(priority)}, and prefer ${en(lifestyle)}.`;
-    return {
-      dubai: `${context} Explore Dubai's business, career, education and urban living options.`,
-      vietnam: `${context} Compare housing, living costs and long-term planning across Vietnam's cities.`,
-      thailand: `${context} Compare healthcare, family neighborhoods and long-term residency options in Thailand.`
-    };
-  }
-  const context = `‘${purpose}’ 목적과 ‘${priority}’ 우선순위, ‘${lifestyle}’ 생활환경을 선택하셨습니다.`;
-  return {
-    dubai: `${context} 두바이의 사업·커리어·교육과 도시 생활 조건을 함께 살펴보세요.`,
-    vietnam: `${context} 베트남의 도시별 주거와 생활비, 장기생활 준비 항목을 비교해 보세요.`,
-    thailand: `${context} 태국의 의료·생활환경과 가족 생활권, 장기체류 준비 항목을 비교해 보세요.`
+  const [purpose, timeline, family, priority, lifestyle] = diagnosisAnswers;
+  const selected = [purpose, priority, lifestyle].filter(Boolean).join(' · ');
+  const en = document.documentElement.lang === 'en';
+  const details = {
+    dubai: {
+      matched: ['사업', '취업', '투자'].includes(purpose) || ['사업 기회', '세금·자산'].includes(priority) || ['글로벌 대도시', '비즈니스 중심'].includes(lifestyle),
+      ko: '두바이의 사업·커리어와 글로벌 도시 생활 조건이 선택하신 우선순위와 맞습니다.',
+      en: 'Dubai’s business, career, and global city options align with your selected priorities.',
+      cautionKo: '비자 자격, 실제 사업·취업 조건과 비용을 별도로 확인하세요.',
+      cautionEn: 'Check visa eligibility, actual business or employment requirements, and costs separately.'
+    },
+    vietnam: {
+      matched: ['은퇴', '새로운 라이프스타일'].includes(purpose) || ['주거', '생활비'].includes(priority) || ['조용한 생활', '휴양·리조트형'].includes(lifestyle),
+      ko: '베트남의 도시별 생활·주거 선택지가 선택하신 우선순위와 맞습니다.',
+      en: 'Vietnam’s city-by-city living and housing options align with your selected priorities.',
+      cautionKo: '도시별 차이와 장기 체류 자격, 의료 접근성을 확인하세요.',
+      cautionEn: 'Check city differences, long-stay eligibility, and healthcare access.'
+    },
+    thailand: {
+      matched: ['은퇴', '새로운 라이프스타일'].includes(purpose) || ['의료·웰니스', '생활비', '주거'].includes(priority) || ['휴양·리조트형', '가족 중심'].includes(lifestyle),
+      ko: '태국의 생활환경·웰니스 선택지가 선택하신 우선순위와 맞습니다.',
+      en: 'Thailand’s lifestyle and wellness options align with your selected priorities.',
+      cautionKo: '장기 체류 자격, 의료보험과 지역별 생활비를 확인하세요.',
+      cautionEn: 'Check long-stay eligibility, health insurance, and local living costs.'
+    }
   };
+  return Object.fromEntries(Object.entries(details).map(([key, item]) => {
+    const matched = item.matched ? item.ko : (en ? 'Your answers make this a useful country to compare alongside the top match.' : '선택하신 조건 일부가 맞아 함께 비교할 후보에 포함됐습니다.');
+    const caution = en ? item.cautionEn : item.cautionKo;
+    const childNote = ['자녀 1명', '자녀 2명 이상'].includes(family)
+      ? (en ? ' Compare school admission requirements and commute options for your children.' : ' 자녀 동반을 고려해 학교 입학 조건과 통학권도 함께 비교하세요.') : '';
+    const timeNote = timeline ? (en ? ` Your target timeline is ${timeline}.` : ` 이동 시기는 ‘${timeline}’으로 선택하셨습니다.`) : '';
+    return [key, `${en ? item.en : matched} ${caution}${childNote}${timeNote}`];
+  }));
 }
 
 function showDiagnosisResult() {
   const ranking = calculateCountryResult();
-
   const first = ranking[0].country;
   const second = ranking[1].country;
-
-  const countryName = {
-    dubai: 'Dubai',
-    vietnam: 'Vietnam',
-    thailand: 'Thailand'
-  };
-
-  quizProgress.textContent = '먼저 살펴볼 국가';
+  const english = document.documentElement.lang === 'en';
+  const countryName = { dubai: 'Dubai', vietnam: 'Vietnam', thailand: 'Thailand' };
+  quizProgress.textContent = english ? 'Your first matches' : '먼저 살펴볼 국가';
   quizBack.hidden = false;
   quizMeter.hidden = true;
   const reasons = buildResultReasons();
-
-  quizQuestion.innerHTML = `
-    <strong>${countryName[first]}</strong>와 <strong>${countryName[second]}</strong>을 먼저 살펴보세요.
-  `;
-
+  quizQuestion.innerHTML = english
+    ? `Start by comparing <strong>${countryName[first]}</strong> and <strong>${countryName[second]}</strong>.`
+    : `<strong>${countryName[first]}</strong>와 <strong>${countryName[second]}</strong>을 먼저 살펴보세요.`;
+  const scoreRows = ranking.map((item, index) => `<li><span>${String(index + 1).padStart(2, '0')} · ${countryName[item.country]}</span><strong>${item.score}${english ? ' pts' : '점'}</strong></li>`).join('');
+  const timing = diagnosisAnswers[1] || '';
   quizOptions.innerHTML = `
-    <p class="quiz-result-description">
-      ${reasons[first]}<br><br>${document.documentElement.lang === 'en' ? `Moving timeline: ${ilacEnglish[diagnosisAnswers[1]] || diagnosisAnswers[1]}. This is an exploration suggestion based on your answers. Residency eligibility and individual requirements must be checked separately.` : `이동 시기: ${diagnosisAnswers[1]}. 답변을 기준으로 한 탐색 제안이며, 체류 자격과 개인별 조건은 별도로 확인해야 합니다.`}
-    </p>
-    <div class="quiz-result-actions"><a class="text-link" href="/content/q/new/index.html" rel="noopener">전문가에게 질문하기</a><a class="text-link" href="#academy" data-result-academy>전체 Academy 보기</a></div>
-    <button type="button" class="quiz-result-button" id="compare-countries">
-      국가 비교하기
-    </button>
+    <ol class="quiz-ranking" aria-label="${english ? 'Country match scores' : '국가별 진단 점수'}">${scoreRows}</ol>
+    <p class="quiz-result-description">${reasons[first]}<br><br>${english ? `Your target timeline: ${ilacEnglish[timing] || timing}. This is an exploration suggestion, not an eligibility decision.` : `이동 시기: ${timing}. 답변을 바탕으로 한 탐색 제안이며, 체류 자격 판정은 아닙니다.`}</p>
+    <div class="quiz-result-actions"><a class="text-link" href="/content/q/new/index.html" rel="noopener">${english ? 'Ask an expert' : '전문가에게 질문하기'}</a><a class="text-link" href="#academy" data-result-academy>${english ? 'View Academy' : '전체 Academy 보기'}</a></div>
+    <button type="button" class="quiz-result-button" id="compare-countries">${english ? 'Compare countries' : '국가 비교하기'}</button>
   `;
-
   quizOptions.querySelector('[data-result-academy]')?.addEventListener('click', () => quiz.close());
-  const compareButton =
-    document.querySelector('#compare-countries');
-
-  compareButton.addEventListener('click', () => {
-    /*
-     * 비교 페이지에서 진단 결과를 활용할 수 있도록 저장
-     */
+  document.querySelector('#compare-countries')?.addEventListener('click', () => {
     try {
-      localStorage.setItem('ilacDiagnosisResult', JSON.stringify({
-        answers: diagnosisAnswers, ranking, reasons, createdAt: new Date().toISOString()
-      }));
+      localStorage.setItem('ilacDiagnosisResult', JSON.stringify({ answers: diagnosisAnswers, ranking, reasons, createdAt: new Date().toISOString() }));
     } catch { /* Comparison also works without browser storage. */ }
-
     window.location.href = 'compare/index.html';
   });
 }
-
 
 quizBack?.addEventListener('click', () => {
   if (quizMeter.hidden) step = questions.length - 1;
@@ -746,3 +742,4 @@ document.querySelector('#copy-inquiry')?.addEventListener('click', async () => {
     document.querySelector('#consult-status').textContent = '문의 내용을 선택했습니다. 복사해서 이메일에 붙여넣어 주세요.';
   }
 });
+

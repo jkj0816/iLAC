@@ -545,7 +545,51 @@
   }
 
   const summary = document.querySelector('.result-summary');
-  if (savedResult && !summary.hidden) { const note = document.createElement('p'); note.className = 'result-disclaimer'; note.textContent = '답변을 바탕으로 먼저 살펴볼 국가를 제안합니다. 체류 자격과 실제 적합성은 개인 조건과 전문가 상담으로 확인하세요.'; summary.append(note); }
+  let activeDiagnosis = null;
+  if (savedResult) { try { activeDiagnosis = JSON.parse(savedResult); } catch {} }
+  if (activeDiagnosis && Array.isArray(activeDiagnosis.ranking) && !summary.hidden) {
+    const answers = activeDiagnosis.answers || [];
+    const labels = ['목적', '이동 시기', '가족 구성', '중요 기준', '생활환경'];
+    const context = document.createElement('section');
+    context.className = 'diagnosis-context';
+    context.setAttribute('aria-label', '진단 결과 요약');
+    const title = document.createElement('h3'); title.textContent = '진단에서 선택한 조건'; context.append(title);
+    const chips = document.createElement('ul'); chips.className = 'diagnosis-chips';
+    answers.forEach((answer, index) => {
+      if (!answer) return;
+      const chip = document.createElement('li');
+      const label = document.createElement('span'); label.textContent = labels[index];
+      const value = document.createElement('strong'); value.textContent = answer;
+      chip.append(label, value); chips.append(chip);
+    });
+    context.append(chips);
+    const scores = document.createElement('div'); scores.className = 'diagnosis-scores';
+    const maxScore = Math.max(1, ...activeDiagnosis.ranking.map(item => Number(item.score) || 0));
+    activeDiagnosis.ranking.forEach(item => {
+      const country = countryInfo[item.country]; if (!country) return;
+      const row = document.createElement('div'); row.className = 'diagnosis-score';
+      const text = document.createElement('div'); text.className = 'diagnosis-score-label';
+      const name = document.createElement('strong'); name.textContent = country.name;
+      const value = document.createElement('span'); value.textContent = `${Number(item.score) || 0}점`;
+      text.append(name, value);
+      const track = document.createElement('div'); track.className = 'diagnosis-score-track';
+      track.setAttribute('role', 'img'); track.setAttribute('aria-label', `${country.name} 진단 점수 ${Number(item.score) || 0}점`);
+      const fill = document.createElement('span'); fill.style.width = `${Math.max(0, Math.min(100, (Number(item.score) || 0) / maxScore * 100))}%`; track.append(fill);
+      row.append(text, track); scores.append(row);
+    });
+    context.append(scores); summary.append(context);
+    const movePlan = document.createElement('section'); movePlan.className = 'diagnosis-plan';
+    const planTitle = document.createElement('h3'); planTitle.textContent = '다음 준비 단계'; movePlan.append(planTitle);
+    const plan = document.createElement('ol');
+    const timeline = answers[1] || '';
+    const tasks = timeline === '6개월 이내'
+      ? ['상위 국가의 체류 자격과 필수 서류를 공식 자료로 확인', '주거·학교·보험 등 필수 비용의 견적 수집', '전문가 상담으로 일정과 제약 조건 점검']
+      : timeline === '1년 이내'
+        ? ['상위 국가의 비자·체류 경로와 신청 요건 확인', '예산과 가족 생활권에 맞춰 도시·학교 후보 추리기', '출국 6개월 전까지 서류·자산·보험 일정 정리']
+        : ['관심 국가의 생활비·의료·교육 정보 출처와 기준일 확인', '도시별 생활권과 장기 체류 선택지 비교', '분기별로 제도와 개인 상황을 다시 점검'];
+    tasks.forEach(task => { const item = document.createElement('li'); item.textContent = task; plan.append(item); });
+    movePlan.append(plan); summary.append(movePlan);
+  }
 
   /*
    * 언어
